@@ -1,0 +1,16 @@
+[tools]
+go = "1.27.1"
+
+[tasks.deps]
+description = "Install Go dependencies"
+run = "go mod download"
+
+[tasks.build]
+description = "Build the application"
+depends = ["gen:swagger"]
+run = "go build -o dist/server ."
+
+[tasks.serve]
+description = "Build and run the application"
+depends = ["build"]
+run = "./dist/server"

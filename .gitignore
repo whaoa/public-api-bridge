@@ -1,0 +1,28 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# misc
+.DS_Store
+*.local
+
+# editors
+.idea/
+.vscode/
+!.vscode/extensions.json
+
+# builds
+build/
+dist/
+.output/
+
+# caches
+.cache/
+.temp/
+.tmp/
+
+# logs
+logs/
+*.log
+
+# config files
+config.toml
+config.local.toml
