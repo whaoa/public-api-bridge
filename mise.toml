@@ -1,5 +1,10 @@
 [tools]
 go = "1.27.1"
+"go:github.com/swaggo/swag/cmd/swag" = "1.16.6"
+
+[tasks."gen:swagger"]
+description = "Generate Swagger documentation"
+run = "swag init --output swagger --parseInternal"
 
 [tasks.deps]
 description = "Install Go dependencies"

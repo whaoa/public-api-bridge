@@ -3,12 +3,18 @@ package app
 import (
 	"context"
 	"log/slog"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/labstack/echo/v5"
 	"github.com/samber/lo"
+
+	swagger "github.com/swaggo/echo-swagger/v2"
+	_ "github.com/whaoa/public-api-bridge/swagger"
+
 	"github.com/whaoa/public-api-bridge/internal/config"
 	"github.com/whaoa/public-api-bridge/internal/douban"
 	doubanOfficial "github.com/whaoa/public-api-bridge/internal/douban/provider/official"
@@ -56,6 +62,14 @@ func Serve(cfg *config.Config) error {
 		teapot.NewProvider(client),
 	)
 	twitter.NewHandler(twitterService).RegisterRoutes(api)
+
+	// Swagger UI
+	swaggerRedirectHandler := func(c *echo.Context) error {
+		return c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")
+	}
+	s.GET("/swagger", swaggerRedirectHandler)
+	s.GET("/swagger/", swaggerRedirectHandler)
+	s.GET("/swagger/*", swagger.WrapHandler)
 
 	return s.Serve(ctx, func(s *server.Server) error {
 		s.Logger.Info("server start", slog.Int("port", cfg.ServerPort))

@@ -1,0 +1,2220 @@
+{
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "API bridge service for accessing public APIs (Twitter, Douban, TMDB, etc.)",
+        "title": "Public API Bridge",
+        "termsOfService": "https://github.com/whaoa/public-api-bridge",
+        "contact": {
+            "name": "API Support",
+            "url": "https://github.com/whaoa/public-api-bridge/issues"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/api",
+    "paths": {
+        "/douban/person/{id}": {
+            "get": {
+                "tags": [
+                    "Douban"
+                ],
+                "summary": "Get a Douban person",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Person ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/douban.Person"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/douban/person/{id}/movies": {
+            "get": {
+                "tags": [
+                    "Douban"
+                ],
+                "summary": "List person movie credits",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Person ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Result offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Result count",
+                        "name": "count",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/douban.MovieCreditSlice"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/douban/person/{id}/photos": {
+            "get": {
+                "tags": [
+                    "Douban"
+                ],
+                "summary": "List person photos",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Person ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Result offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Result count",
+                        "name": "count",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/douban.PhotoSlice"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/douban/raw/{type}/videos/{id}": {
+            "get": {
+                "produces": [
+                    "text/html"
+                ],
+                "tags": [
+                    "Douban"
+                ],
+                "summary": "Get video source",
+                "parameters": [
+                    {
+                        "enum": [
+                            "movie",
+                            "tv"
+                        ],
+                        "type": "string",
+                        "description": "Subject type",
+                        "name": "type",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Video ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "307": {
+                        "description": "Temporary Redirect",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "headers": {
+                            "Location": {
+                                "type": "string",
+                                "description": "Redirect target"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/douban/{type}/subjects": {
+            "get": {
+                "tags": [
+                    "Douban"
+                ],
+                "summary": "Search Douban subjects",
+                "parameters": [
+                    {
+                        "enum": [
+                            "movie",
+                            "tv"
+                        ],
+                        "type": "string",
+                        "description": "Subject type",
+                        "name": "type",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search keyword",
+                        "name": "keyword",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/douban.Subject"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/douban/{type}/subjects/{id}": {
+            "get": {
+                "tags": [
+                    "Douban"
+                ],
+                "summary": "Get a Douban subject",
+                "parameters": [
+                    {
+                        "enum": [
+                            "movie",
+                            "tv"
+                        ],
+                        "type": "string",
+                        "description": "Subject type",
+                        "name": "type",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Subject ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/douban.Movie"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/douban/{type}/subjects/{id}/casts": {
+            "get": {
+                "tags": [
+                    "Douban"
+                ],
+                "summary": "Get subject cast",
+                "parameters": [
+                    {
+                        "enum": [
+                            "movie",
+                            "tv"
+                        ],
+                        "type": "string",
+                        "description": "Subject type",
+                        "name": "type",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Subject ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/douban.MovieCasts"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/douban/{type}/subjects/{id}/photos": {
+            "get": {
+                "tags": [
+                    "Douban"
+                ],
+                "summary": "List subject photos",
+                "parameters": [
+                    {
+                        "enum": [
+                            "movie",
+                            "tv"
+                        ],
+                        "type": "string",
+                        "description": "Subject type",
+                        "name": "type",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Subject ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Result offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Result count",
+                        "name": "count",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/douban.PhotoSlice"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/douban/{type}/subjects/{id}/recommendations": {
+            "get": {
+                "tags": [
+                    "Douban"
+                ],
+                "summary": "List subject recommendations",
+                "parameters": [
+                    {
+                        "enum": [
+                            "movie",
+                            "tv"
+                        ],
+                        "type": "string",
+                        "description": "Subject type",
+                        "name": "type",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Subject ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/douban.MovieRecommendation"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/douban/{type}/subjects/{id}/videos": {
+            "get": {
+                "tags": [
+                    "Douban"
+                ],
+                "summary": "List subject videos",
+                "parameters": [
+                    {
+                        "enum": [
+                            "movie",
+                            "tv"
+                        ],
+                        "type": "string",
+                        "description": "Subject type",
+                        "name": "type",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Subject ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/douban.Video"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tmdb/media": {
+            "get": {
+                "tags": [
+                    "TMDB"
+                ],
+                "summary": "Search media",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search keyword",
+                        "name": "keyword",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "lang",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tmdb.MediaSlice"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tmdb/movie/{id}": {
+            "get": {
+                "tags": [
+                    "TMDB"
+                ],
+                "summary": "Get a movie",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TMDB movie ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tmdb.Movie"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tmdb/movie/{id}/casts": {
+            "get": {
+                "tags": [
+                    "TMDB"
+                ],
+                "summary": "Get media cast",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TMDB media ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tmdb.MediaCasts"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tmdb/movie/{id}/images": {
+            "get": {
+                "tags": [
+                    "TMDB"
+                ],
+                "summary": "Get media images",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TMDB media ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tmdb.MediaImages"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tmdb/person": {
+            "get": {
+                "tags": [
+                    "TMDB"
+                ],
+                "summary": "Search people",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search keyword",
+                        "name": "keyword",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "lang",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tmdb.EmbedPersonSlice"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tmdb/person/{id}": {
+            "get": {
+                "tags": [
+                    "TMDB"
+                ],
+                "summary": "Get a person",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TMDB person ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tmdb.Person"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tmdb/person/{id}/credits": {
+            "get": {
+                "tags": [
+                    "TMDB"
+                ],
+                "summary": "Get person credits",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TMDB person ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tmdb.PersonCredits"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tmdb/person/{id}/profiles": {
+            "get": {
+                "tags": [
+                    "TMDB"
+                ],
+                "summary": "Get person profiles",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TMDB person ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/tmdb.Image"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tmdb/tv/{id}": {
+            "get": {
+                "tags": [
+                    "TMDB"
+                ],
+                "summary": "Get a TV show",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TMDB TV show ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tmdb.TV"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tmdb/tv/{id}/casts": {
+            "get": {
+                "tags": [
+                    "TMDB"
+                ],
+                "summary": "Get media cast",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TMDB media ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tmdb.MediaCasts"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tmdb/tv/{id}/images": {
+            "get": {
+                "tags": [
+                    "TMDB"
+                ],
+                "summary": "Get media images",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TMDB media ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tmdb.MediaImages"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tmdb/tv/{id}/seasons/{season}": {
+            "get": {
+                "tags": [
+                    "TMDB"
+                ],
+                "summary": "Get a TV season",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TMDB TV show ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Season number",
+                        "name": "season",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tmdb.Season"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/twitter/{handle}": {
+            "get": {
+                "tags": [
+                    "Twitter"
+                ],
+                "summary": "Get a Twitter user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User handle",
+                        "name": "handle",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/twitter.User"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/twitter/{handle}/status/{id}": {
+            "get": {
+                "tags": [
+                    "Twitter"
+                ],
+                "summary": "Get a tweet",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User handle",
+                        "name": "handle",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Tweet ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/twitter.Tweet"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/twitter/{handle}/statuses": {
+            "get": {
+                "tags": [
+                    "Twitter"
+                ],
+                "summary": "List user tweets",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User handle",
+                        "name": "handle",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Pagination cursor",
+                        "name": "cursor",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/twitter.TweetSlice"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        },
+        "/twitter/{handle}/statuses/{id}": {
+            "get": {
+                "tags": [
+                    "Twitter"
+                ],
+                "summary": "Get a tweet",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User handle",
+                        "name": "handle",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Tweet ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/twitter.Tweet"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ReasonError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "douban.Movie": {
+            "type": "object",
+            "properties": {
+                "actors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "countries": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "directors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "episodes": {
+                    "type": "integer"
+                },
+                "genres": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "intro": {
+                    "type": "string"
+                },
+                "languages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "poster": {
+                    "type": "string"
+                },
+                "rating": {
+                    "$ref": "#/definitions/douban.Rating"
+                },
+                "release_at": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "thumbnail": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "douban.MovieCast": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "character": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "latin_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "douban.MovieCasts": {
+            "type": "object",
+            "properties": {
+                "actors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/douban.MovieCast"
+                    }
+                },
+                "directors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/douban.MovieCast"
+                    }
+                }
+            }
+        },
+        "douban.MovieCredit": {
+            "type": "object",
+            "properties": {
+                "actors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "directors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "genres": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "poster": {
+                    "type": "string"
+                },
+                "rating": {
+                    "$ref": "#/definitions/douban.Rating"
+                },
+                "release_at": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "thumbnail": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "douban.MovieCreditSlice": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/douban.MovieCredit"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "douban.MovieRecommendation": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "poster": {
+                    "type": "string"
+                },
+                "rating": {
+                    "$ref": "#/definitions/douban.Rating"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "douban.Person": {
+            "type": "object",
+            "properties": {
+                "IMDb": {
+                    "type": "string"
+                },
+                "birthday": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "family_members": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "latin_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "other_names": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "photo": {
+                    "type": "string"
+                },
+                "place_of_birth": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "douban.Photo": {
+            "type": "object",
+            "properties": {
+                "create_time": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "large": {
+                    "type": "string"
+                },
+                "likes": {
+                    "type": "integer"
+                },
+                "normal": {
+                    "type": "string"
+                },
+                "position": {
+                    "type": "integer"
+                },
+                "small": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "douban.PhotoSlice": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/douban.Photo"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "douban.Rating": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "max": {
+                    "type": "number"
+                },
+                "start": {
+                    "type": "number"
+                },
+                "value": {
+                    "type": "number"
+                }
+            }
+        },
+        "douban.Subject": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "poster": {
+                    "type": "string"
+                },
+                "rating": {
+                    "$ref": "#/definitions/douban.Rating"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "douban.Video": {
+            "type": "object",
+            "properties": {
+                "create_time": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "thumbnail": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "errors.ReasonError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                }
+            }
+        },
+        "tmdb.Company": {
+            "type": "object",
+            "properties": {
+                "country": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "logo": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "tmdb.Country": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "tmdb.EmbedPerson": {
+            "type": "object",
+            "properties": {
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "original_name": {
+                    "type": "string"
+                },
+                "profile": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "tmdb.EmbedPersonSlice": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.EmbedPerson"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "tmdb.EmbedSeason": {
+            "type": "object",
+            "properties": {
+                "episodes": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "overview": {
+                    "type": "string"
+                },
+                "poster": {
+                    "type": "string"
+                },
+                "season": {
+                    "type": "integer"
+                }
+            }
+        },
+        "tmdb.Episode": {
+            "type": "object",
+            "properties": {
+                "episode": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "overview": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "release_date": {
+                    "type": "string"
+                },
+                "season": {
+                    "type": "integer"
+                },
+                "still": {
+                    "type": "string"
+                }
+            }
+        },
+        "tmdb.Image": {
+            "type": "object",
+            "properties": {
+                "country": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "width": {
+                    "type": "integer"
+                }
+            }
+        },
+        "tmdb.Language": {
+            "type": "object",
+            "properties": {
+                "english_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "tmdb.Media": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "original_language": {
+                    "type": "string"
+                },
+                "original_name": {
+                    "type": "string"
+                },
+                "overview": {
+                    "type": "string"
+                },
+                "poster": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "release_date": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "tmdb.MediaCast": {
+            "type": "object",
+            "properties": {
+                "character": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "original_name": {
+                    "type": "string"
+                },
+                "profile": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "tmdb.MediaCasts": {
+            "type": "object",
+            "properties": {
+                "actors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.MediaCast"
+                    }
+                },
+                "staffs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.MediaCast"
+                    }
+                }
+            }
+        },
+        "tmdb.MediaCredit": {
+            "type": "object",
+            "properties": {
+                "character": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "original_language": {
+                    "type": "string"
+                },
+                "original_name": {
+                    "type": "string"
+                },
+                "overview": {
+                    "type": "string"
+                },
+                "poster": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "release_date": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "tmdb.MediaImages": {
+            "type": "object",
+            "properties": {
+                "backdrops": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.Image"
+                    }
+                },
+                "logos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.Image"
+                    }
+                },
+                "posters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.Image"
+                    }
+                }
+            }
+        },
+        "tmdb.MediaSlice": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.Media"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "tmdb.Movie": {
+            "type": "object",
+            "properties": {
+                "IMDb": {
+                    "type": "string"
+                },
+                "backdrop": {
+                    "type": "string"
+                },
+                "genres": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "original_language": {
+                    "type": "string"
+                },
+                "original_name": {
+                    "type": "string"
+                },
+                "overview": {
+                    "type": "string"
+                },
+                "poster": {
+                    "type": "string"
+                },
+                "production_companies": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.Company"
+                    }
+                },
+                "production_countries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.Country"
+                    }
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "release_date": {
+                    "type": "string"
+                },
+                "runtime": {
+                    "type": "integer"
+                },
+                "spoken_languages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.Language"
+                    }
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "tmdb.Person": {
+            "type": "object",
+            "properties": {
+                "IMDb": {
+                    "type": "string"
+                },
+                "biography": {
+                    "type": "string"
+                },
+                "birthday": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "other_names": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "place_of_birth": {
+                    "type": "string"
+                },
+                "profile": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "tmdb.PersonCredits": {
+            "type": "object",
+            "properties": {
+                "as_actor": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.MediaCredit"
+                    }
+                },
+                "as_staff": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.MediaCredit"
+                    }
+                }
+            }
+        },
+        "tmdb.Season": {
+            "type": "object",
+            "properties": {
+                "episodes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.Episode"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "overview": {
+                    "type": "string"
+                },
+                "poster": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "release_date": {
+                    "type": "string"
+                },
+                "season": {
+                    "type": "integer"
+                }
+            }
+        },
+        "tmdb.TV": {
+            "type": "object",
+            "properties": {
+                "IMDb": {
+                    "type": "string"
+                },
+                "backdrop": {
+                    "type": "string"
+                },
+                "genres": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "original_language": {
+                    "type": "string"
+                },
+                "original_name": {
+                    "type": "string"
+                },
+                "overview": {
+                    "type": "string"
+                },
+                "poster": {
+                    "type": "string"
+                },
+                "production_companies": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.Company"
+                    }
+                },
+                "production_countries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.Country"
+                    }
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "release_date": {
+                    "type": "string"
+                },
+                "seasons": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.EmbedSeason"
+                    }
+                },
+                "spoken_languages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tmdb.Language"
+                    }
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "twitter.Attachment": {
+            "type": "object",
+            "properties": {
+                "thumbnail": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "twitter.BasicTweet": {
+            "type": "object",
+            "properties": {
+                "screen_name": {
+                    "type": "string"
+                },
+                "tweet": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "twitter.BasicUser": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "screen_name": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "twitter.Tweet": {
+            "type": "object",
+            "properties": {
+                "attachments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/twitter.Attachment"
+                    }
+                },
+                "author": {
+                    "$ref": "#/definitions/twitter.BasicUser"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "likes": {
+                    "type": "integer"
+                },
+                "mosaic_photo": {
+                    "type": "string"
+                },
+                "possibly_sensitive": {
+                    "type": "boolean"
+                },
+                "quote": {
+                    "$ref": "#/definitions/twitter.BasicTweet"
+                },
+                "replies": {
+                    "type": "integer"
+                },
+                "replying_to": {
+                    "$ref": "#/definitions/twitter.BasicTweet"
+                },
+                "retweets": {
+                    "type": "integer"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "views": {
+                    "type": "integer"
+                }
+            }
+        },
+        "twitter.TweetSlice": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/twitter.Tweet"
+                    }
+                },
+                "next_cursor": {
+                    "type": "string"
+                },
+                "prev_cursor": {
+                    "type": "string"
+                }
+            }
+        },
+        "twitter.User": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "banner": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "followers": {
+                    "type": "integer"
+                },
+                "following": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "joined_at": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "protected": {
+                    "type": "boolean"
+                },
+                "screen_name": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "verified": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}

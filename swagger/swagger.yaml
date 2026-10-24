@@ -1,0 +1,1457 @@
+basePath: /api
+definitions:
+  douban.Movie:
+    properties:
+      actors:
+        items:
+          type: string
+        type: array
+      countries:
+        items:
+          type: string
+        type: array
+      description:
+        type: string
+      directors:
+        items:
+          type: string
+        type: array
+      episodes:
+        type: integer
+      genres:
+        items:
+          type: string
+        type: array
+      id:
+        type: string
+      intro:
+        type: string
+      languages:
+        items:
+          type: string
+        type: array
+      poster:
+        type: string
+      rating:
+        $ref: '#/definitions/douban.Rating'
+      release_at:
+        items:
+          type: string
+        type: array
+      thumbnail:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+      year:
+        type: integer
+    type: object
+  douban.MovieCast:
+    properties:
+      avatar:
+        type: string
+      character:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      latin_name:
+        type: string
+      name:
+        type: string
+      roles:
+        items:
+          type: string
+        type: array
+      url:
+        type: string
+    type: object
+  douban.MovieCasts:
+    properties:
+      actors:
+        items:
+          $ref: '#/definitions/douban.MovieCast'
+        type: array
+      directors:
+        items:
+          $ref: '#/definitions/douban.MovieCast'
+        type: array
+    type: object
+  douban.MovieCredit:
+    properties:
+      actors:
+        items:
+          type: string
+        type: array
+      description:
+        type: string
+      directors:
+        items:
+          type: string
+        type: array
+      genres:
+        items:
+          type: string
+        type: array
+      id:
+        type: string
+      poster:
+        type: string
+      rating:
+        $ref: '#/definitions/douban.Rating'
+      release_at:
+        items:
+          type: string
+        type: array
+      roles:
+        items:
+          type: string
+        type: array
+      thumbnail:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+      year:
+        type: integer
+    type: object
+  douban.MovieCreditSlice:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/douban.MovieCredit'
+        type: array
+      total:
+        type: integer
+    type: object
+  douban.MovieRecommendation:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      poster:
+        type: string
+      rating:
+        $ref: '#/definitions/douban.Rating'
+      title:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+  douban.Person:
+    properties:
+      IMDb:
+        type: string
+      birthday:
+        type: string
+      description:
+        type: string
+      family_members:
+        items:
+          type: string
+        type: array
+      gender:
+        type: string
+      id:
+        type: string
+      latin_name:
+        type: string
+      name:
+        type: string
+      other_names:
+        items:
+          type: string
+        type: array
+      photo:
+        type: string
+      place_of_birth:
+        type: string
+      url:
+        type: string
+    type: object
+  douban.Photo:
+    properties:
+      create_time:
+        type: string
+      id:
+        type: string
+      large:
+        type: string
+      likes:
+        type: integer
+      normal:
+        type: string
+      position:
+        type: integer
+      small:
+        type: string
+      url:
+        type: string
+    type: object
+  douban.PhotoSlice:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/douban.Photo'
+        type: array
+      total:
+        type: integer
+    type: object
+  douban.Rating:
+    properties:
+      count:
+        type: integer
+      max:
+        type: number
+      start:
+        type: number
+      value:
+        type: number
+    type: object
+  douban.Subject:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      poster:
+        type: string
+      rating:
+        $ref: '#/definitions/douban.Rating'
+      title:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+      year:
+        type: integer
+    type: object
+  douban.Video:
+    properties:
+      create_time:
+        type: string
+      duration:
+        type: integer
+      id:
+        type: string
+      source:
+        type: string
+      thumbnail:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+  errors.ReasonError:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      reason:
+        type: string
+    type: object
+  tmdb.Company:
+    properties:
+      country:
+        type: string
+      id:
+        type: integer
+      logo:
+        type: string
+      name:
+        type: string
+      url:
+        type: string
+    type: object
+  tmdb.Country:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  tmdb.EmbedPerson:
+    properties:
+      gender:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      original_name:
+        type: string
+      profile:
+        type: string
+      url:
+        type: string
+    type: object
+  tmdb.EmbedPersonSlice:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/tmdb.EmbedPerson'
+        type: array
+      total:
+        type: integer
+    type: object
+  tmdb.EmbedSeason:
+    properties:
+      episodes:
+        type: integer
+      name:
+        type: string
+      overview:
+        type: string
+      poster:
+        type: string
+      season:
+        type: integer
+    type: object
+  tmdb.Episode:
+    properties:
+      episode:
+        type: integer
+      name:
+        type: string
+      overview:
+        type: string
+      rating:
+        type: number
+      release_date:
+        type: string
+      season:
+        type: integer
+      still:
+        type: string
+    type: object
+  tmdb.Image:
+    properties:
+      country:
+        type: string
+      height:
+        type: integer
+      language:
+        type: string
+      url:
+        type: string
+      width:
+        type: integer
+    type: object
+  tmdb.Language:
+    properties:
+      english_name:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  tmdb.Media:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      original_language:
+        type: string
+      original_name:
+        type: string
+      overview:
+        type: string
+      poster:
+        type: string
+      rating:
+        type: number
+      release_date:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+  tmdb.MediaCast:
+    properties:
+      character:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      original_name:
+        type: string
+      profile:
+        type: string
+      role:
+        type: string
+      url:
+        type: string
+    type: object
+  tmdb.MediaCasts:
+    properties:
+      actors:
+        items:
+          $ref: '#/definitions/tmdb.MediaCast'
+        type: array
+      staffs:
+        items:
+          $ref: '#/definitions/tmdb.MediaCast'
+        type: array
+    type: object
+  tmdb.MediaCredit:
+    properties:
+      character:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      original_language:
+        type: string
+      original_name:
+        type: string
+      overview:
+        type: string
+      poster:
+        type: string
+      rating:
+        type: number
+      release_date:
+        type: string
+      role:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+  tmdb.MediaImages:
+    properties:
+      backdrops:
+        items:
+          $ref: '#/definitions/tmdb.Image'
+        type: array
+      logos:
+        items:
+          $ref: '#/definitions/tmdb.Image'
+        type: array
+      posters:
+        items:
+          $ref: '#/definitions/tmdb.Image'
+        type: array
+    type: object
+  tmdb.MediaSlice:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/tmdb.Media'
+        type: array
+      total:
+        type: integer
+    type: object
+  tmdb.Movie:
+    properties:
+      IMDb:
+        type: string
+      backdrop:
+        type: string
+      genres:
+        items:
+          type: string
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+      original_language:
+        type: string
+      original_name:
+        type: string
+      overview:
+        type: string
+      poster:
+        type: string
+      production_companies:
+        items:
+          $ref: '#/definitions/tmdb.Company'
+        type: array
+      production_countries:
+        items:
+          $ref: '#/definitions/tmdb.Country'
+        type: array
+      rating:
+        type: number
+      release_date:
+        type: string
+      runtime:
+        type: integer
+      spoken_languages:
+        items:
+          $ref: '#/definitions/tmdb.Language'
+        type: array
+      url:
+        type: string
+    type: object
+  tmdb.Person:
+    properties:
+      IMDb:
+        type: string
+      biography:
+        type: string
+      birthday:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      other_names:
+        items:
+          type: string
+        type: array
+      place_of_birth:
+        type: string
+      profile:
+        type: string
+      url:
+        type: string
+    type: object
+  tmdb.PersonCredits:
+    properties:
+      as_actor:
+        items:
+          $ref: '#/definitions/tmdb.MediaCredit'
+        type: array
+      as_staff:
+        items:
+          $ref: '#/definitions/tmdb.MediaCredit'
+        type: array
+    type: object
+  tmdb.Season:
+    properties:
+      episodes:
+        items:
+          $ref: '#/definitions/tmdb.Episode'
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+      overview:
+        type: string
+      poster:
+        type: string
+      rating:
+        type: number
+      release_date:
+        type: string
+      season:
+        type: integer
+    type: object
+  tmdb.TV:
+    properties:
+      IMDb:
+        type: string
+      backdrop:
+        type: string
+      genres:
+        items:
+          type: string
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+      original_language:
+        type: string
+      original_name:
+        type: string
+      overview:
+        type: string
+      poster:
+        type: string
+      production_companies:
+        items:
+          $ref: '#/definitions/tmdb.Company'
+        type: array
+      production_countries:
+        items:
+          $ref: '#/definitions/tmdb.Country'
+        type: array
+      rating:
+        type: number
+      release_date:
+        type: string
+      seasons:
+        items:
+          $ref: '#/definitions/tmdb.EmbedSeason'
+        type: array
+      spoken_languages:
+        items:
+          $ref: '#/definitions/tmdb.Language'
+        type: array
+      url:
+        type: string
+    type: object
+  twitter.Attachment:
+    properties:
+      thumbnail:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+  twitter.BasicTweet:
+    properties:
+      screen_name:
+        type: string
+      tweet:
+        type: string
+      url:
+        type: string
+    type: object
+  twitter.BasicUser:
+    properties:
+      avatar:
+        type: string
+      name:
+        type: string
+      screen_name:
+        type: string
+      url:
+        type: string
+    type: object
+  twitter.Tweet:
+    properties:
+      attachments:
+        items:
+          $ref: '#/definitions/twitter.Attachment'
+        type: array
+      author:
+        $ref: '#/definitions/twitter.BasicUser'
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      likes:
+        type: integer
+      mosaic_photo:
+        type: string
+      possibly_sensitive:
+        type: boolean
+      quote:
+        $ref: '#/definitions/twitter.BasicTweet'
+      replies:
+        type: integer
+      replying_to:
+        $ref: '#/definitions/twitter.BasicTweet'
+      retweets:
+        type: integer
+      url:
+        type: string
+      views:
+        type: integer
+    type: object
+  twitter.TweetSlice:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/twitter.Tweet'
+        type: array
+      next_cursor:
+        type: string
+      prev_cursor:
+        type: string
+    type: object
+  twitter.User:
+    properties:
+      avatar:
+        type: string
+      banner:
+        type: string
+      description:
+        type: string
+      followers:
+        type: integer
+      following:
+        type: integer
+      id:
+        type: string
+      joined_at:
+        type: string
+      location:
+        type: string
+      name:
+        type: string
+      protected:
+        type: boolean
+      screen_name:
+        type: string
+      url:
+        type: string
+      verified:
+        type: boolean
+    type: object
+info:
+  contact:
+    name: API Support
+    url: https://github.com/whaoa/public-api-bridge/issues
+  description: API bridge service for accessing public APIs (Twitter, Douban, TMDB,
+    etc.)
+  termsOfService: https://github.com/whaoa/public-api-bridge
+  title: Public API Bridge
+  version: "1.0"
+paths:
+  /douban/{type}/subjects:
+    get:
+      parameters:
+      - description: Subject type
+        enum:
+        - movie
+        - tv
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: Search keyword
+        in: query
+        name: keyword
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/douban.Subject'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Search Douban subjects
+      tags:
+      - Douban
+  /douban/{type}/subjects/{id}:
+    get:
+      parameters:
+      - description: Subject type
+        enum:
+        - movie
+        - tv
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: Subject ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/douban.Movie'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get a Douban subject
+      tags:
+      - Douban
+  /douban/{type}/subjects/{id}/casts:
+    get:
+      parameters:
+      - description: Subject type
+        enum:
+        - movie
+        - tv
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: Subject ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/douban.MovieCasts'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get subject cast
+      tags:
+      - Douban
+  /douban/{type}/subjects/{id}/photos:
+    get:
+      parameters:
+      - description: Subject type
+        enum:
+        - movie
+        - tv
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: Subject ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Result offset
+        in: query
+        name: offset
+        type: integer
+      - description: Result count
+        in: query
+        name: count
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/douban.PhotoSlice'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: List subject photos
+      tags:
+      - Douban
+  /douban/{type}/subjects/{id}/recommendations:
+    get:
+      parameters:
+      - description: Subject type
+        enum:
+        - movie
+        - tv
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: Subject ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/douban.MovieRecommendation'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: List subject recommendations
+      tags:
+      - Douban
+  /douban/{type}/subjects/{id}/videos:
+    get:
+      parameters:
+      - description: Subject type
+        enum:
+        - movie
+        - tv
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: Subject ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/douban.Video'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: List subject videos
+      tags:
+      - Douban
+  /douban/person/{id}:
+    get:
+      parameters:
+      - description: Person ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/douban.Person'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get a Douban person
+      tags:
+      - Douban
+  /douban/person/{id}/movies:
+    get:
+      parameters:
+      - description: Person ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Result offset
+        in: query
+        name: offset
+        type: integer
+      - description: Result count
+        in: query
+        name: count
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/douban.MovieCreditSlice'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: List person movie credits
+      tags:
+      - Douban
+  /douban/person/{id}/photos:
+    get:
+      parameters:
+      - description: Person ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Result offset
+        in: query
+        name: offset
+        type: integer
+      - description: Result count
+        in: query
+        name: count
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/douban.PhotoSlice'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: List person photos
+      tags:
+      - Douban
+  /douban/raw/{type}/videos/{id}:
+    get:
+      parameters:
+      - description: Subject type
+        enum:
+        - movie
+        - tv
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: Video ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - text/html
+      responses:
+        "307":
+          description: Temporary Redirect
+          headers:
+            Location:
+              description: Redirect target
+              type: string
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get video source
+      tags:
+      - Douban
+  /tmdb/media:
+    get:
+      parameters:
+      - description: Search keyword
+        in: query
+        name: keyword
+        required: true
+        type: string
+      - description: Language
+        in: query
+        name: lang
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tmdb.MediaSlice'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Search media
+      tags:
+      - TMDB
+  /tmdb/movie/{id}:
+    get:
+      parameters:
+      - description: TMDB movie ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Language
+        in: query
+        name: lang
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tmdb.Movie'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get a movie
+      tags:
+      - TMDB
+  /tmdb/movie/{id}/casts:
+    get:
+      parameters:
+      - description: TMDB media ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Language
+        in: query
+        name: lang
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tmdb.MediaCasts'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get media cast
+      tags:
+      - TMDB
+  /tmdb/movie/{id}/images:
+    get:
+      parameters:
+      - description: TMDB media ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Language
+        in: query
+        name: lang
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tmdb.MediaImages'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get media images
+      tags:
+      - TMDB
+  /tmdb/person:
+    get:
+      parameters:
+      - description: Search keyword
+        in: query
+        name: keyword
+        required: true
+        type: string
+      - description: Language
+        in: query
+        name: lang
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tmdb.EmbedPersonSlice'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Search people
+      tags:
+      - TMDB
+  /tmdb/person/{id}:
+    get:
+      parameters:
+      - description: TMDB person ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Language
+        in: query
+        name: lang
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tmdb.Person'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get a person
+      tags:
+      - TMDB
+  /tmdb/person/{id}/credits:
+    get:
+      parameters:
+      - description: TMDB person ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Language
+        in: query
+        name: lang
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tmdb.PersonCredits'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get person credits
+      tags:
+      - TMDB
+  /tmdb/person/{id}/profiles:
+    get:
+      parameters:
+      - description: TMDB person ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Language
+        in: query
+        name: lang
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/tmdb.Image'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get person profiles
+      tags:
+      - TMDB
+  /tmdb/tv/{id}:
+    get:
+      parameters:
+      - description: TMDB TV show ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Language
+        in: query
+        name: lang
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tmdb.TV'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get a TV show
+      tags:
+      - TMDB
+  /tmdb/tv/{id}/casts:
+    get:
+      parameters:
+      - description: TMDB media ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Language
+        in: query
+        name: lang
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tmdb.MediaCasts'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get media cast
+      tags:
+      - TMDB
+  /tmdb/tv/{id}/images:
+    get:
+      parameters:
+      - description: TMDB media ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Language
+        in: query
+        name: lang
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tmdb.MediaImages'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get media images
+      tags:
+      - TMDB
+  /tmdb/tv/{id}/seasons/{season}:
+    get:
+      parameters:
+      - description: TMDB TV show ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Season number
+        in: path
+        name: season
+        required: true
+        type: string
+      - description: Language
+        in: query
+        name: lang
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tmdb.Season'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get a TV season
+      tags:
+      - TMDB
+  /twitter/{handle}:
+    get:
+      parameters:
+      - description: User handle
+        in: path
+        name: handle
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/twitter.User'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get a Twitter user
+      tags:
+      - Twitter
+  /twitter/{handle}/status/{id}:
+    get:
+      parameters:
+      - description: User handle
+        in: path
+        name: handle
+        required: true
+        type: string
+      - description: Tweet ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/twitter.Tweet'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get a tweet
+      tags:
+      - Twitter
+  /twitter/{handle}/statuses:
+    get:
+      parameters:
+      - description: User handle
+        in: path
+        name: handle
+        required: true
+        type: string
+      - description: Pagination cursor
+        in: query
+        name: cursor
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/twitter.TweetSlice'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: List user tweets
+      tags:
+      - Twitter
+  /twitter/{handle}/statuses/{id}:
+    get:
+      parameters:
+      - description: User handle
+        in: path
+        name: handle
+        required: true
+        type: string
+      - description: Tweet ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/twitter.Tweet'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get a tweet
+      tags:
+      - Twitter
+schemes:
+- http
+- https
+swagger: "2.0"
