@@ -16,5 +16,5 @@ func New(level string) *slog.Logger {
 		ReplaceAttr: newAttrProcessor(debug),
 	}
 
-	return slog.New(slog.NewJSONHandler(os.Stdout, options))
+	return slog.New(withMetadataHandler(slog.NewJSONHandler(os.Stdout, options)))
 }

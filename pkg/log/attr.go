@@ -9,6 +9,7 @@ const (
 	attrKeyScope    = "scope"
 	attrKeyDuration = "duration"
 	attrKeyError    = "error"
+	attrKeyMetadata = "meta"
 )
 
 func Scope(scope string) slog.Attr {

@@ -39,7 +39,12 @@ func New(port int, logger *slog.Logger) *Server {
 		HTTPErrorHandler: echo.DefaultHTTPErrorHandler(false),
 	})
 
-	engine.Use(middleware.Recover())
+	engine.Use(
+		middleware.Recover(),
+		middleware.RequestID(),
+		middlewareRequestLogger(),
+		middlewareRequestLoggerMetadata(),
+	)
 
 	return &Server{
 		Echo:   engine,
