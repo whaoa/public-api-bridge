@@ -2,18 +2,22 @@ package twitter
 
 import (
 	"context"
+	"log/slog"
 
 	"github.com/samber/lo"
 	"github.com/whaoa/public-api-bridge/pkg/errors"
+	"github.com/whaoa/public-api-bridge/pkg/log"
 )
 
 type Provider interface {
+	Name() string
 	GetUser(ctx context.Context, handle string) (*User, error)
 	GetTweet(ctx context.Context, handle string, id string) (*Tweet, error)
 	ListTweets(ctx context.Context, handle string, cursor string) (*TweetSlice, error)
 }
 
 type Service struct {
+	logger    *slog.Logger
 	providers []Provider
 }
 
@@ -24,6 +28,12 @@ func (s *Service) GetUser(ctx context.Context, handle string) (*User, error) {
 		if err == nil || errors.IsReason(err) {
 			return user, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetUser failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.ServiceUnavailable("no twitter provider available")
 }
@@ -35,6 +45,12 @@ func (s *Service) GetTweet(ctx context.Context, handle string, id string) (*Twee
 		if err == nil || errors.IsReason(err) {
 			return tweet, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetTweet failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.ServiceUnavailable("no twitter provider available")
 }
@@ -50,6 +66,12 @@ func (s *Service) ListTweets(ctx context.Context, handle string, cursor string) 
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.ListTweets failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.ServiceUnavailable("no twitter provider available")
 }

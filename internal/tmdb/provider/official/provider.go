@@ -20,6 +20,10 @@ type provider struct {
 	client *request.Client
 }
 
+func (p *provider) Name() string {
+	return "tmdb-official"
+}
+
 func (p *provider) SearchMedia(ctx context.Context, keyword, lang string, page int) (*tmdb.MediaSlice, error) {
 	if page <= 0 {
 		page = 1

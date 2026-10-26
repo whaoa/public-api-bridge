@@ -3,12 +3,15 @@ package bangumi
 import (
 	"context"
 	"fmt"
+	"log/slog"
 
 	"github.com/samber/lo"
 	"github.com/whaoa/public-api-bridge/pkg/errors"
+	"github.com/whaoa/public-api-bridge/pkg/log"
 )
 
 type Provider interface {
+	Name() string
 	SearchAnime(ctx context.Context, keyword string, offset, count int) (*SubjectSlice, error)
 	GetAnime(ctx context.Context, id string) (*Subject, error)
 	ListEpisodes(ctx context.Context, id string, offset, count int) (*EpisodeSlice, error)
@@ -19,6 +22,7 @@ type Provider interface {
 }
 
 type Service struct {
+	logger    *slog.Logger
 	providers []Provider
 }
 
@@ -33,6 +37,12 @@ func (s *Service) SearchAnime(ctx context.Context, keyword string, offset, count
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.SearchAnime failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.ServiceUnavailable("no bangumi provider available")
 }
@@ -46,6 +56,12 @@ func (s *Service) GetAnime(ctx context.Context, id string) (*Subject, error) {
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetAnime failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.ServiceUnavailable("no bangumi provider available")
 }
@@ -61,6 +77,12 @@ func (s *Service) ListEpisodes(ctx context.Context, id string, offset, count int
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.ListEpisodes failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.ServiceUnavailable("no bangumi provider available")
 }
@@ -79,6 +101,12 @@ func (s *Service) GetCharacters(ctx context.Context, id string) ([]*Character, e
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetCharacters failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.ServiceUnavailable("no bangumi provider available")
 }
@@ -94,6 +122,12 @@ func (s *Service) GetStaffs(ctx context.Context, id string) ([]*Staff, error) {
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetStaffs failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.ServiceUnavailable("no bangumi provider available")
 }
@@ -107,6 +141,12 @@ func (s *Service) GetPerson(ctx context.Context, id string) (*Person, error) {
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetPerson failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.ServiceUnavailable("no bangumi provider available")
 }
@@ -122,10 +162,16 @@ func (s *Service) GetPersonCredits(ctx context.Context, id string) ([]*PersonCre
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetPersonCredits failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.ServiceUnavailable("no bangumi provider available")
 }
 
-func NewService(providers ...Provider) *Service {
-	return &Service{providers: providers}
+func NewService(logger *slog.Logger, providers ...Provider) *Service {
+	return &Service{logger: logger, providers: providers}
 }

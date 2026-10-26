@@ -46,11 +46,15 @@ func Serve(cfg *config.Config) error {
 	api := s.Group("/api")
 
 	// Douban service
-	doubanService := douban.NewService(doubanOfficial.NewProvider(client))
+	doubanService := douban.NewService(
+		logger.With(log.Scope("douban")),
+		doubanOfficial.NewProvider(client),
+	)
 	douban.NewHandler(doubanService).RegisterRoutes(api)
 
 	// Bangumi service
 	bangumiService := bangumi.NewService(
+		logger.With(log.Scope("bangumi")),
 		bangumiOfficial.NewProvider(client),
 		bangumiWeb.NewProvider(client),
 	)
@@ -60,13 +64,17 @@ func Serve(cfg *config.Config) error {
 	if len(cfg.TMDBKeys) == 0 {
 		logger.Warn("tmdb api keys are not configured, tmdb endpoints will be unavailable")
 	}
-	tmdbService := tmdb.NewService(lo.Map(cfg.TMDBKeys, func(key string, _ int) tmdb.Provider {
-		return tmdbOfficial.NewProvider(client, key)
-	})...)
+	tmdbService := tmdb.NewService(
+		logger.With(log.Scope("tmdb")),
+		lo.Map(cfg.TMDBKeys, func(key string, _ int) tmdb.Provider {
+			return tmdbOfficial.NewProvider(client, key)
+		})...,
+	)
 	tmdb.NewHandler(tmdbService).RegisterRoutes(api)
 
 	// Twitter service
 	twitterService := twitter.NewService(
+		logger.With(log.Scope("twitter")),
 		fx.NewProvider(client),
 		vx.NewProvider(client),
 		teapot.NewProvider(client),

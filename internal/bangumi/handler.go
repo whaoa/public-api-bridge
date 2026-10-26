@@ -9,7 +9,7 @@ import (
 )
 
 type handler struct {
-	service *service
+	service *Service
 }
 
 func (h *handler) RegisterRoutes(router server.Router) {
@@ -121,6 +121,6 @@ func (h *handler) GetPersonCredits(c *echo.Context) error {
 	return server.JSON(c, result, err)
 }
 
-func NewHandler(service *service) *handler {
+func NewHandler(service *Service) *handler {
 	return &handler{service: service}
 }

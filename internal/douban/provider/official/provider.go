@@ -21,6 +21,10 @@ type provider struct {
 	client *request.Client
 }
 
+func (p *provider) Name() string {
+	return "douban-official"
+}
+
 func (p *provider) SearchMovie(ctx context.Context, keyword string) ([]*douban.Subject, error) {
 	resp, err := p.client.R().
 		SetHeader("Referer", "https://m.douban.com/search/").

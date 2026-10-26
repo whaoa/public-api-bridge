@@ -14,6 +14,10 @@ type provider struct {
 	client *request.Client
 }
 
+func (p *provider) Name() string {
+	return "bangumi-official"
+}
+
 func (p *provider) SearchAnime(ctx context.Context, keyword string, offset, count int) (*bangumi.SubjectSlice, error) {
 	if offset < 0 {
 		offset = 0

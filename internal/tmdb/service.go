@@ -2,12 +2,15 @@ package tmdb
 
 import (
 	"context"
+	"log/slog"
 
 	"github.com/samber/lo"
 	"github.com/whaoa/public-api-bridge/pkg/errors"
+	"github.com/whaoa/public-api-bridge/pkg/log"
 )
 
 type Provider interface {
+	Name() string
 	SearchMedia(ctx context.Context, keyword, lang string, page int) (*MediaSlice, error)
 	GetMovie(ctx context.Context, id string, lang string) (*Movie, error)
 	GetTV(ctx context.Context, id string, lang string) (*TV, error)
@@ -21,6 +24,7 @@ type Provider interface {
 }
 
 type Service struct {
+	logger    *slog.Logger
 	providers []Provider
 }
 
@@ -36,6 +40,12 @@ func (s *Service) SearchMedia(ctx context.Context, keyword, lang string, page in
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.SearchMedia failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.Internal("no tmdb provider available")
 }
@@ -55,6 +65,12 @@ func (s *Service) GetMovie(ctx context.Context, id, lang string) (*Movie, error)
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetMovie failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.Internal("no tmdb provider available")
 }
@@ -77,6 +93,12 @@ func (s *Service) GetTV(ctx context.Context, id, lang string) (*TV, error) {
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetTV failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.Internal("no tmdb provider available")
 }
@@ -92,6 +114,12 @@ func (s *Service) GetSeason(ctx context.Context, id, season, lang string) (*Seas
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetSeason failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.Internal("no tmdb provider available")
 }
@@ -112,6 +140,12 @@ func (s *Service) GetMediaCasts(ctx context.Context, kind, id, lang string) (*Me
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetMediaCasts failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.Internal("no tmdb provider available")
 }
@@ -133,6 +167,12 @@ func (s *Service) GetMediaImages(ctx context.Context, kind, id, lang string) (*M
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetMediaImages failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.Internal("no tmdb provider available")
 }
@@ -149,6 +189,12 @@ func (s *Service) SearchPerson(ctx context.Context, keyword, lang string, page i
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.SearchPerson failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.Internal("no tmdb provider available")
 }
@@ -163,6 +209,12 @@ func (s *Service) GetPerson(ctx context.Context, id, lang string) (*Person, erro
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetPerson failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.Internal("no tmdb provider available")
 }
@@ -178,6 +230,12 @@ func (s *Service) GetPersonProfiles(ctx context.Context, id, lang string) ([]*Im
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetPersonProfiles failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.Internal("no tmdb provider available")
 }
@@ -198,12 +256,19 @@ func (s *Service) GetPersonCredits(ctx context.Context, id, lang string) (*Perso
 		if err == nil || errors.IsReason(err) {
 			return result, err
 		}
+		s.logger.ErrorContext(
+			ctx,
+			"provider.GetPersonCredits failed",
+			slog.String("provider", provider.Name()),
+			log.Err(err),
+		)
 	}
 	return nil, errors.Internal("no tmdb provider available")
 }
 
-func NewService(providers ...Provider) *Service {
+func NewService(logger *slog.Logger, providers ...Provider) *Service {
 	return &Service{
+		logger:    logger,
 		providers: providers,
 	}
 }

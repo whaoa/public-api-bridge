@@ -12,6 +12,10 @@ type provider struct {
 	client *request.Client
 }
 
+func (p *provider) Name() string {
+	return "twitter-vx"
+}
+
 func (p *provider) GetUser(ctx context.Context, handle string) (*twitter.User, error) {
 	return nil, errors.New("not implemented")
 }
