@@ -1,5 +1,169 @@
 basePath: /api
 definitions:
+  bangumi.Character:
+    properties:
+      actors:
+        items:
+          $ref: '#/definitions/bangumi.EmbedPerson'
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+      overview:
+        type: string
+      profile:
+        type: string
+      url:
+        type: string
+    type: object
+  bangumi.EmbedPerson:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      overview:
+        type: string
+      profile:
+        type: string
+      url:
+        type: string
+    type: object
+  bangumi.Episode:
+    properties:
+      duration:
+        type: integer
+      episode:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      original_name:
+        type: string
+      overview:
+        type: string
+      release_date:
+        type: string
+      subject_id:
+        type: integer
+      url:
+        type: string
+    type: object
+  bangumi.EpisodeSlice:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/bangumi.Episode'
+        type: array
+      total:
+        type: integer
+    type: object
+  bangumi.Person:
+    properties:
+      biography:
+        type: string
+      birthday:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      original_name:
+        type: string
+      other_names:
+        items:
+          type: string
+        type: array
+      place_of_birth:
+        type: string
+      profile:
+        type: string
+      url:
+        type: string
+    type: object
+  bangumi.PersonCredit:
+    properties:
+      character_id:
+        type: integer
+      character_profile:
+        type: string
+      characterName:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      original_name:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+  bangumi.Rating:
+    properties:
+      count:
+        type: integer
+      value:
+        type: number
+    type: object
+  bangumi.Staff:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      profile:
+        type: string
+      role:
+        type: string
+      url:
+        type: string
+    type: object
+  bangumi.Subject:
+    properties:
+      episodes:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      original_name:
+        type: string
+      original_overview:
+        type: string
+      overview:
+        type: string
+      poster:
+        type: string
+      rating:
+        $ref: '#/definitions/bangumi.Rating'
+      release_date:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      thumbnail:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+  bangumi.SubjectSlice:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/bangumi.Subject'
+        type: array
+      total:
+        type: integer
+    type: object
   douban.Movie:
     properties:
       actors:
@@ -722,6 +886,192 @@ info:
   title: Public API Bridge
   version: "1.0"
 paths:
+  /bangumi/{id}/credits:
+    get:
+      parameters:
+      - description: Person ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/bangumi.PersonCredit'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: list person credits
+      tags:
+      - Bangumi
+  /bangumi/{id}/person:
+    get:
+      parameters:
+      - description: Person ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/bangumi.Person'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: get a bangumi person
+      tags:
+      - Bangumi
+  /bangumi/subjects:
+    get:
+      parameters:
+      - description: Search keyword
+        in: query
+        name: keyword
+        required: true
+        type: string
+      - description: Result offset
+        in: query
+        name: offset
+        type: integer
+      - description: Result count
+        in: query
+        name: count
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/bangumi.SubjectSlice'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Search anime
+      tags:
+      - Bangumi
+  /bangumi/subjects/{id}:
+    get:
+      parameters:
+      - description: Subject ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/bangumi.Subject'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: Get a anime subject
+      tags:
+      - Bangumi
+  /bangumi/subjects/{id}/characters:
+    get:
+      parameters:
+      - description: Subject ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/bangumi.Character'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: get anime characters
+      tags:
+      - Bangumi
+  /bangumi/subjects/{id}/episodes:
+    get:
+      parameters:
+      - description: Subject ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Result offset
+        in: query
+        name: offset
+        type: integer
+      - description: Result count
+        in: query
+        name: count
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/bangumi.EpisodeSlice'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: get anime episodes
+      tags:
+      - Bangumi
+  /bangumi/subjects/{id}/staffs:
+    get:
+      parameters:
+      - description: Subject ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/bangumi.Staff'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ReasonError'
+      summary: get anime staffs
+      tags:
+      - Bangumi
   /douban/{type}/subjects:
     get:
       parameters:

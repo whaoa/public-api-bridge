@@ -15,6 +15,9 @@ import (
 	swagger "github.com/swaggo/echo-swagger/v2"
 	_ "github.com/whaoa/public-api-bridge/swagger"
 
+	"github.com/whaoa/public-api-bridge/internal/bangumi"
+	bangumiOfficial "github.com/whaoa/public-api-bridge/internal/bangumi/provider/official"
+	bangumiWeb "github.com/whaoa/public-api-bridge/internal/bangumi/provider/web"
 	"github.com/whaoa/public-api-bridge/internal/config"
 	"github.com/whaoa/public-api-bridge/internal/douban"
 	doubanOfficial "github.com/whaoa/public-api-bridge/internal/douban/provider/official"
@@ -45,6 +48,13 @@ func Serve(cfg *config.Config) error {
 	// Douban service
 	doubanService := douban.NewService(doubanOfficial.NewProvider(client))
 	douban.NewHandler(doubanService).RegisterRoutes(api)
+
+	// Bangumi service
+	bangumiService := bangumi.NewService(
+		bangumiOfficial.NewProvider(client),
+		bangumiWeb.NewProvider(client),
+	)
+	bangumi.NewHandler(bangumiService).RegisterRoutes(api)
 
 	// TMDB service
 	if len(cfg.TMDBKeys) == 0 {

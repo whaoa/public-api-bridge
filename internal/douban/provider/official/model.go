@@ -9,6 +9,7 @@ import (
 	"github.com/tidwall/gjson"
 	"github.com/whaoa/public-api-bridge/internal/douban"
 	"github.com/whaoa/public-api-bridge/pkg/errors"
+	"github.com/whaoa/public-api-bridge/pkg/util"
 )
 
 var errorInvalidResponse = errors.Internal("invalid douban api response")
@@ -146,7 +147,7 @@ func buildVideoList(payload string) ([]*douban.Video, error) {
 			Title:      item.Get("title").String(),
 			Source:     item.Get("video_url").String(),
 			Thumbnail:  item.Get("cover_url").String(),
-			Duration:   normalDuration(item.Get("runtime").String()),
+			Duration:   util.NormalDuration(item.Get("runtime").String()),
 			CreateTime: normalizeDateTime(item.Get("create_time").String()),
 			Kind:       kind,
 			Url:        fmt.Sprintf("https://movie.douban.com/trailer/%s/", id),
